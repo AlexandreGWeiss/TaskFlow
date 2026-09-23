@@ -1,0 +1,68 @@
+// TaskFlow - schema.prisma
+// Rode "npx prisma migrate dev --name init" depois de configurar o .env
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String        @id @default(uuid())
+  name          String
+  email         String        @unique
+  passwordHash  String
+  createdAt     DateTime      @default(now())
+
+  ownedBoards   Board[]       @relation("BoardOwner")
+  boardMembers  BoardMember[]
+}
+
+model Board {
+  id          String        @id @default(uuid())
+  name        String
+  createdAt   DateTime      @default(now())
+
+  ownerId     String
+  owner       User          @relation("BoardOwner", fields: [ownerId], references: [id])
+
+  members     BoardMember[]
+  columns     Column[]
+}
+
+// Tabela de relação N-N entre User e Board (colaboradores de um quadro)
+model BoardMember {
+  id        String   @id @default(uuid())
+  boardId   String
+  userId    String
+  role      String   @default("member") // "owner" | "member"
+
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([boardId, userId])
+}
+
+model Column {
+  id        String   @id @default(uuid())
+  name      String
+  order     Int      // define a posição da coluna no board (0, 1, 2...)
+
+  boardId   String
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  tasks     Task[]
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  order       Int      // posição da tarefa dentro da coluna
+  createdAt   DateTime @default(now())
+
+  columnId    String
+  column      Column   @relation(fields: [columnId], references: [id], onDelete: Cascade)
+}

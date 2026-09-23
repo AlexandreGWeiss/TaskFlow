@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+!.env.example
+dist/
+coverage/
+
+backend/dev.db
+backend/.agents/
+backend/.claude/
+backend/.cursor/
+backend/.devin/
