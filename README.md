@@ -1,42 +1,28 @@
 # TaskFlow
 
-Sistema de gerenciamento de tarefas baseado em Kanban, desenvolvido como projeto acadêmico e prático.
+Sistema colaborativo de gerenciamento de tarefas no formato Kanban.
 
-O objetivo do TaskFlow é permitir que usuários organizem projetos, quadros e tarefas de forma simples e colaborativa.
+O TaskFlow permite organizar projetos por quadros (Boards), colunas (Columns) e tarefas (Tasks), com autenticação de usuários e controle de acesso aos quadros.
 
 ## Tecnologias
 
-### Backend
-
-- NestJS
-- TypeScript
-- Prisma ORM
-- PostgreSQL
-- Supabase
-- JWT
-- Passport
-- bcrypt
-
 ### Frontend
-
 - Next.js
 - TypeScript
 - Tailwind CSS
 - App Router
 
-## Funcionalidades
+### Backend
+- NestJS
+- TypeScript
+- Prisma ORM
+- JWT
+- Passport
+- bcrypt
 
-Atualmente, o backend possui:
-
-- Cadastro de usuários
-- Login de usuários
-- Autenticação utilizando JWT
-- Proteção de rotas autenticadas
-- Criação, consulta, atualização e exclusão de Boards
-- Criação, consulta, atualização e exclusão de Columns
-- Controle de acesso aos Boards e Columns
-- Integração com PostgreSQL através do Supabase
-- Migrations utilizando Prisma
+### Banco de dados
+- PostgreSQL
+- Supabase
 
 ## Estrutura do projeto
 
@@ -44,105 +30,229 @@ Atualmente, o backend possui:
 TaskFlow/
 ├── backend/
 │   ├── prisma/
-│   │   ├── migrations/
-│   │   └── schema.prisma
 │   └── src/
 │       ├── auth/
 │       ├── boards/
 │       ├── columns/
-│       ├── app.module.ts
-│       ├── main.ts
+│       ├── tasks/
 │       └── prisma.service.ts
-│
 ├── frontend/
-│
-├── .gitignore
+│   ├── app/
+│   ├── public/
+│   └── ...
 └── README.md
 ```
 
 ## Backend
 
-O backend foi desenvolvido utilizando NestJS e segue uma estrutura modular.
+O backend NestJS roda atualmente em `http://localhost:3333`.
 
-Para executar o backend:
+### Autenticação
+
+- Registro de usuários
+- Login
+- Hash de senhas com bcrypt
+- Autenticação via JWT
+- Proteção de rotas com Passport/JWT
+
+Endpoints:
+
+```http
+POST /auth/register
+POST /auth/login
+```
+
+O login retorna:
+
+```json
+{
+  "access_token": "JWT"
+}
+```
+
+Rotas protegidas utilizam:
+
+```http
+Authorization: Bearer <token>
+```
+
+## Boards
+
+O backend possui operações para:
+
+- Criar Board
+- Listar Boards do usuário
+- Buscar Board por ID
+- Excluir Board
+
+Os Boards possuem controle de acesso por proprietário e membros.
+
+## Columns
+
+```http
+GET    /boards/:boardId/columns
+POST   /boards/:boardId/columns
+PATCH  /boards/:boardId/columns/:columnId
+DELETE /boards/:boardId/columns/:columnId
+```
+
+## Tasks
+
+```http
+GET    /boards/:boardId/columns/:columnId/tasks
+POST   /boards/:boardId/columns/:columnId/tasks
+PATCH  /boards/:boardId/columns/:columnId/tasks/:taskId
+DELETE /boards/:boardId/columns/:columnId/tasks/:taskId
+PATCH  /boards/:boardId/tasks/:taskId/move
+```
+
+As Tasks pertencem a uma Column e podem ser movimentadas entre Columns.
+
+Quando o `order` não é informado ao criar ou mover uma Task, o backend coloca a Task no final da Column de destino.
+
+## CORS
+
+O backend permite comunicação com o frontend em desenvolvimento através de:
+
+```text
+http://localhost:3000
+```
+
+Métodos permitidos:
+
+```text
+GET
+POST
+PATCH
+DELETE
+OPTIONS
+```
+
+Headers permitidos:
+
+```text
+Authorization
+Content-Type
+```
+
+## Banco de dados
+
+O projeto utiliza PostgreSQL hospedado no Supabase e Prisma ORM.
+
+Principais modelos:
+
+- User
+- Board
+- BoardMember
+- Column
+- Task
+
+Relação principal:
+
+```text
+User
+ └── Board
+      ├── BoardMember
+      └── Column
+           └── Task
+```
+
+As informações de conexão e o segredo JWT são mantidos em variáveis de ambiente e não devem ser versionados.
+
+## Frontend
+
+O frontend oficial está em:
+
+```text
+frontend/
+```
+
+O frontend ainda está em desenvolvimento. A estrutura inicial foi criada com Next.js, TypeScript, Tailwind CSS e App Router.
+
+Próximas funcionalidades:
+
+1. Tela de Login
+2. Tela de Cadastro
+3. Integração com JWT
+4. Listagem de Boards
+5. Criação, abertura e exclusão de Boards
+6. Interface Kanban
+7. Gerenciamento de Columns
+8. Gerenciamento de Tasks
+9. Drag-and-drop
+10. Melhorias de interface e responsividade
+
+## Como executar
+
+### Backend
 
 ```bash
 cd backend
 npm install
+npx prisma generate
 npm run start:dev
 ```
 
-O servidor utiliza a porta definida no arquivo `.env`.
+Backend:
 
-## Banco de dados
-
-O projeto utiliza PostgreSQL hospedado no Supabase.
-
-O Prisma é utilizado como ORM e para gerenciamento das migrations.
-
-Para gerar o Prisma Client:
-
-```bash
-npx prisma generate
+```text
+http://localhost:3333
 ```
 
-Para executar migrations em ambiente de desenvolvimento:
-
-```bash
-npx prisma migrate dev
-```
-
-## Variáveis de ambiente
-
-O backend utiliza variáveis de ambiente para configurações como:
-
-- Conexão com o banco de dados
-- Chave secreta do JWT
-- Expiração do token
-- Porta da aplicação
-
-O arquivo `.env` não deve ser enviado para o GitHub.
-
-Utilize um arquivo `.env.example` como referência para configurar o ambiente local.
-
-## Desenvolvimento
-
-O projeto está sendo desenvolvido de forma incremental.
-
-### Backend
-
-- [x] Configuração inicial do backend
-- [x] Configuração do Prisma
-- [x] Integração com Supabase
-- [x] Cadastro de usuários
-- [x] Login de usuários
-- [x] Autenticação JWT
-- [x] CRUD de Boards
-- [x] CRUD de Columns
-- [ ] CRUD de Tasks
-- [ ] Organização e movimentação de Tasks
+Configure o arquivo `.env` com as variáveis necessárias antes de executar.
 
 ### Frontend
 
-- [x] Configuração inicial do Next.js
-- [ ] Interface de autenticação
-- [ ] Interface de Boards
-- [ ] Interface de Columns
-- [ ] Interface de Tasks
-- [ ] Integração com a API
-- [ ] Melhorias de UI/UX
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-### Finalização
+Frontend:
 
-- [ ] Testes
-- [ ] Validações
-- [ ] Documentação da API
-- [ ] Deploy
+```text
+http://localhost:3000
+```
 
-## Objetivo
+## Status do projeto
 
-O TaskFlow busca oferecer uma aplicação de gerenciamento de tarefas com organização visual através de quadros Kanban, permitindo acompanhar o progresso das atividades de um projeto.
+### Backend
 
-## Status
+- [x] Estrutura NestJS
+- [x] Prisma
+- [x] PostgreSQL/Supabase
+- [x] Registro de usuário
+- [x] Login
+- [x] JWT
+- [x] Boards
+- [x] BoardMembers
+- [x] Columns
+- [x] Tasks
+- [x] Movimentação de Tasks
+- [x] Controle de acesso
+- [x] CORS para desenvolvimento
 
-**Em desenvolvimento.**
+### Frontend
+
+- [x] Projeto Next.js
+- [x] TypeScript
+- [x] Tailwind CSS
+- [x] App Router
+- [ ] Autenticação
+- [ ] Boards
+- [ ] Columns
+- [ ] Tasks
+- [ ] Interface Kanban
+- [ ] Drag-and-drop
+- [ ] Integração completa com a API
+
+## Desenvolvimento
+
+O projeto está sendo desenvolvido de forma incremental, validando cada parte antes de avançar para a próxima.
+
+Alterações no backend devem preservar as regras de autenticação e autorização existentes.
+
+## Licença
+
+Projeto desenvolvido para fins acadêmicos e de aprendizado.
