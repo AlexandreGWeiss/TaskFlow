@@ -1,7 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport'; // requer @nestjs/passport + passport-jwt instalados
 import type { Request } from 'express';
 import { BoardsService } from './boards.service';
+import { UpdateBoardDto } from './dto/update-board.dto';
 
 type AuthenticatedRequest = Request & {
   user: {
@@ -23,6 +34,15 @@ export class BoardsController {
   @Post()
   create(@Req() req: AuthenticatedRequest, @Body() body: { name: string }) {
     return this.boardsService.create(req.user.userId, body.name);
+  }
+
+  @Patch(':id')
+  update(
+    @Req() req: AuthenticatedRequest,
+    @Param('id') id: string,
+    @Body() dto: UpdateBoardDto,
+  ) {
+    return this.boardsService.update(req.user.userId, id, dto);
   }
 
   @Get(':id')
