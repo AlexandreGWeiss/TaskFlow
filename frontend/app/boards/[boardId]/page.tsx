@@ -234,13 +234,13 @@ export default function BoardPage() {
       <main className="mx-auto w-full max-w-[1500px] flex-1 px-5 py-8">
         <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <Link href="/boards" className="text-sm text-slate-500 hover:text-indigo-700">← Meus quadros</Link>
+            <Link href="/boards" className="text-sm text-slate-500 dark:text-slate-400 hover:text-indigo-700 dark:hover:text-indigo-300">← Meus quadros</Link>
             <h1 className="mt-2 text-3xl font-bold tracking-tight">{board?.name ?? "Quadro"}</h1>
           </div>
           <button onClick={() => setEditor({ kind: "column" })} className="primary-button">＋ Adicionar coluna</button>
         </div>
-        {error && <p role="alert" className="mb-5 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}
-        {busy ? <div className="py-16 text-center text-slate-500">Carregando quadro…</div> : (
+        {error && <p role="alert" className="mb-5 rounded-lg bg-red-50 dark:bg-red-950/60 p-3 text-sm text-red-700 dark:text-red-200">{error}</p>}
+        {busy ? <div className="py-16 text-center text-slate-500 dark:text-slate-400">Carregando quadro…</div> : (
           <div className="flex min-h-[55vh] items-start gap-4 overflow-x-auto pb-6">
             {columns.map((column) => (
               <section
@@ -253,7 +253,9 @@ export default function BoardPage() {
                 <header className="relative mb-3 flex items-center justify-between gap-2 px-1">
                   <div className="flex min-w-0 items-center gap-2">
                     <h2 className="truncate font-semibold">{column.name}</h2>
-                    <span className="rounded-full bg-white px-2 py-0.5 text-xs text-slate-500">{column.tasks?.length ?? 0}</span>
+                    <span className="rounded-full bg-white px-2 py-0.5 text-xs text-slate-500 dark:bg-white dark:text-slate-900">
+                      {column.tasks?.length ?? 0}
+                    </span>
                   </div>
                   <div className="flex gap-1">
                     <div className="relative" ref={openColumnMenuId === column.id ? columnMenuRef : null}>
@@ -268,18 +270,18 @@ export default function BoardPage() {
                           setOpenColumnMenuId((current) => current === column.id ? null : column.id);
                           setColorPickerColumnId(null);
                         }}
-                        className="grid size-8 place-items-center rounded-lg text-lg leading-none text-slate-600 hover:bg-white/70 focus-visible:outline-2 focus-visible:outline-indigo-600"
+                        className="grid size-8 place-items-center rounded-lg text-lg leading-none text-slate-600 hover:bg-white/70 dark:hover:bg-slate-800/80 focus-visible:outline-2 focus-visible:outline-indigo-600"
                       >⋮</button>
                       {openColumnMenuId === column.id && (
-                        <div id={`column-menu-${column.id}`} role="menu" aria-label={`Opções da coluna ${column.name}`} className="absolute right-0 top-full z-30 mt-1 w-48 rounded-xl border border-slate-200 bg-white p-1 shadow-lg">
-                          <button type="button" role="menuitem" onClick={() => { setOpenColumnMenuId(null); setEditor({ kind: "column", column }); }} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50">Editar nome</button>
-                          <button type="button" role="menuitem" onClick={() => { setOpenColumnMenuId(null); setColorPickerColumnId(column.id); }} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50">Alterar cor</button>
+                        <div id={`column-menu-${column.id}`} role="menu" aria-label={`Opções da coluna ${column.name}`} className="absolute right-0 top-full z-30 mt-1 w-48 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1 shadow-lg">
+                          <button type="button" role="menuitem" onClick={() => { setOpenColumnMenuId(null); setEditor({ kind: "column", column }); }} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus-visible:bg-slate-50 dark:focus-visible:bg-slate-800">Editar nome</button>
+                          <button type="button" role="menuitem" onClick={() => { setOpenColumnMenuId(null); setColorPickerColumnId(column.id); }} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus-visible:bg-slate-50 dark:focus-visible:bg-slate-800">Alterar cor</button>
                         </div>
                       )}
                     </div>
                     <button aria-label={`Excluir ${column.name}`} onClick={() => void deleteColumn(column)} className="icon-button hover:text-red-600">×</button>
                     {colorPickerColumnId === column.id && (
-                      <div ref={colorPickerRef} aria-label={`Cores da coluna ${column.name}`} className="absolute right-0 top-full z-30 mt-2 grid w-40 grid-cols-5 gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-lg">
+                      <div ref={colorPickerRef} aria-label={`Cores da coluna ${column.name}`} className="absolute right-0 top-full z-30 mt-2 grid w-40 grid-cols-5 gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 shadow-lg">
                         {COLUMN_COLORS.map((color) => (
                           <button
                             key={color.value}
@@ -288,7 +290,7 @@ export default function BoardPage() {
                             aria-pressed={column.color === color.value}
                             title={color.name}
                             onClick={() => void saveColumnColor(column, color.value)}
-                            className="size-6 rounded-full border border-slate-300 ring-offset-2 hover:ring-2 hover:ring-indigo-500 focus-visible:outline-2 focus-visible:outline-indigo-600"
+                            className="size-6 rounded-full border border-slate-300 dark:border-slate-600 ring-offset-2 hover:ring-2 hover:ring-indigo-500 focus-visible:outline-2 focus-visible:outline-indigo-600"
                             style={{ backgroundColor: color.value }}
                           />
                         ))}
@@ -309,35 +311,35 @@ export default function BoardPage() {
                         onDragEnd={() => setDragging(null)}
                         onDragOver={(event) => event.preventDefault()}
                         onDrop={(event) => { event.preventDefault(); event.stopPropagation(); void dropOn(column, task); }}
-                        className={`cursor-grab rounded-xl border border-slate-200 bg-white p-4 shadow-sm active:cursor-grabbing ${dragging?.task.id === task.id ? "opacity-40" : ""}`}
+                        className={`cursor-grab rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 shadow-sm active:cursor-grabbing ${dragging?.task.id === task.id ? "opacity-40" : ""}`}
                       >
                         <div className="flex justify-between gap-2">
-                          <button onClick={() => setEditor({ kind: "task", column, task })} className="text-left font-medium text-slate-800 hover:text-indigo-700">{task.title}</button>
+                          <button onClick={() => setEditor({ kind: "task", column, task })} className="text-left font-medium text-slate-800 dark:text-slate-100 hover:text-indigo-700 dark:hover:text-indigo-300">{task.title}</button>
                           <div className="flex shrink-0 items-start gap-1">
                             <div ref={openTaskMenuId === task.id ? taskMenuRef : null} className="relative" onDragStart={(event) => event.stopPropagation()}>
-                              <button type="button" draggable={false} aria-label="Opções da tarefa" aria-haspopup="menu" aria-expanded={openTaskMenuId === task.id} aria-controls={`task-menu-${task.id}`} title="Opções da tarefa" onClick={() => setOpenTaskMenuId((current) => current === task.id ? null : task.id)} className="grid size-7 place-items-center rounded-lg text-lg leading-none text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600">⋮</button>
+                              <button type="button" draggable={false} aria-label="Opções da tarefa" aria-haspopup="menu" aria-expanded={openTaskMenuId === task.id} aria-controls={`task-menu-${task.id}`} title="Opções da tarefa" onClick={() => setOpenTaskMenuId((current) => current === task.id ? null : task.id)} className="grid size-7 place-items-center rounded-lg text-lg leading-none text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white focus-visible:outline-2 focus-visible:outline-indigo-600">⋮</button>
                               {openTaskMenuId === task.id && (
-                                <div id={`task-menu-${task.id}`} role="menu" aria-label={`Opções da tarefa ${task.title}`} className="absolute right-0 top-full z-30 mt-1 w-52 rounded-xl border border-slate-200 bg-white p-1 shadow-lg">
-                                  <button type="button" role="menuitem" onClick={() => { setOpenTaskMenuId(null); setEditor({ kind: "task", column, task }); }} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50">Editar</button>
-                                  {targetColumn && <button type="button" role="menuitem" onClick={() => { setOpenTaskMenuId(null); void moveTaskToColumn(task, column.id, targetColumn); }} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50">{nextColumnActionLabel(column)}</button>}
-                                  <button type="button" role="menuitem" onClick={() => { setOpenTaskMenuId(null); setEditor({ kind: "task", column, task }); }} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 focus-visible:bg-slate-50">{dueDate ? "Editar data limite" : "Definir data limite"}</button>
-                                  {dueDate && <button type="button" role="menuitem" onClick={() => void clearTaskDueDate(column, task)} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50">Remover data limite</button>}
+                                <div id={`task-menu-${task.id}`} role="menu" aria-label={`Opções da tarefa ${task.title}`} className="absolute right-0 top-full z-30 mt-1 w-52 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1 shadow-lg">
+                                  <button type="button" role="menuitem" onClick={() => { setOpenTaskMenuId(null); setEditor({ kind: "task", column, task }); }} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus-visible:bg-slate-50 dark:focus-visible:bg-slate-800">Editar</button>
+                                  {targetColumn && <button type="button" role="menuitem" onClick={() => { setOpenTaskMenuId(null); void moveTaskToColumn(task, column.id, targetColumn); }} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus-visible:bg-slate-50 dark:focus-visible:bg-slate-800">{nextColumnActionLabel(column)}</button>}
+                                  <button type="button" role="menuitem" onClick={() => { setOpenTaskMenuId(null); setEditor({ kind: "task", column, task }); }} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 focus-visible:bg-slate-50 dark:focus-visible:bg-slate-800">{dueDate ? "Editar data limite" : "Definir data limite"}</button>
+                                  {dueDate && <button type="button" role="menuitem" onClick={() => void clearTaskDueDate(column, task)} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 focus-visible:bg-slate-50 dark:focus-visible:bg-slate-800">Remover data limite</button>}
                                 </div>
                               )}
                             </div>
-                            <button type="button" aria-label="Excluir tarefa" onClick={() => void deleteTask(column, task)} className="grid size-7 place-items-center rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600">×</button>
+                            <button type="button" aria-label="Excluir tarefa" onClick={() => void deleteTask(column, task)} className="grid size-7 place-items-center rounded-lg text-slate-400 hover:bg-red-50 dark:hover:bg-red-950 hover:text-red-600 dark:hover:text-red-300">×</button>
                           </div>
                         </div>
-                        {task.description && <p className="mt-2 whitespace-pre-wrap text-sm leading-5 text-slate-500">{task.description}</p>}
-                        {dueDate && <p className={`mt-3 flex items-center gap-1 text-xs ${isOverdue ? "font-semibold text-red-600" : "text-slate-500"}`}><span aria-hidden="true">{isOverdue ? "⚠" : "◷"}</span>{isOverdue ? "Atrasada · " : ""}{formatDate(dueDate)}</p>}
+                        {task.description && <p className="mt-2 whitespace-pre-wrap text-sm leading-5 text-slate-500 dark:text-slate-400">{task.description}</p>}
+                        {dueDate && <p className={`mt-3 flex items-center gap-1 text-xs ${isOverdue ? "font-semibold text-red-600 dark:text-red-300" : "text-slate-500 dark:text-slate-400"}`}><span aria-hidden="true">{isOverdue ? "⚠" : "◷"}</span>{isOverdue ? "Atrasada · " : ""}{formatDate(dueDate)}</p>}
                       </article>
                     );
                   })}
                 </div>
-                <button onClick={() => setEditor({ kind: "task", column })} className="mt-3 w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-500 hover:bg-white/70 hover:text-indigo-700">＋ Adicionar tarefa</button>
+                <button onClick={() => setEditor({ kind: "task", column })} className="mt-3 w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-500 dark:text-slate-600 hover:bg-white/70 dark:hover:bg-slate-800/80 hover:text-indigo-700 dark:hover:text-indigo-300">＋ Adicionar tarefa</button>
               </section>
             ))}
-            {columns.length === 0 && <div className="w-full rounded-2xl border border-dashed border-slate-300 bg-white py-16 text-center text-slate-500">Adicione uma coluna para começar seu Kanban.</div>}
+            {columns.length === 0 && <div className="w-full rounded-2xl border border-dashed border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 py-16 text-center text-slate-500 dark:text-slate-400">Adicione uma coluna para começar seu Kanban.</div>}
           </div>
         )}
         {editor && <Modal title={editor.kind === "column" ? editor.column ? "Editar coluna" : "Nova coluna" : editor.task ? "Editar tarefa" : "Nova tarefa"} close={() => setEditor(null)}>
