@@ -9,6 +9,18 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { MoveTaskDto } from './dto/move-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 
+function parseDueDate(value: string | null | undefined): Date | null | undefined {
+  if (value === undefined || value === null) return value;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    throw new BadRequestException('dueDate deve usar o formato AAAA-MM-DD');
+  }
+  const date = new Date(`${value}T00:00:00.000Z`);
+  if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== value) {
+    throw new BadRequestException('dueDate deve ser uma data válida');
+  }
+  return date;
+}
+
 @Injectable()
 export class TasksService {
   constructor(private prisma: PrismaService) {}
@@ -46,6 +58,7 @@ export class TasksService {
         title: dto.title,
         description: dto.description,
         order,
+        dueDate: parseDueDate(dto.dueDate),
         columnId,
       },
     });
@@ -65,10 +78,11 @@ export class TasksService {
     if (
       dto.title === undefined &&
       dto.description === undefined &&
-      dto.order === undefined
+      dto.order === undefined &&
+      dto.dueDate === undefined
     ) {
       throw new BadRequestException(
-        'Informe title, description e/ou order para atualizar',
+        'Informe title, description, order e/ou dueDate para atualizar',
       );
     }
 
@@ -80,6 +94,7 @@ export class TasksService {
           description: dto.description,
         }),
         ...(dto.order !== undefined && { order: dto.order }),
+        ...(dto.dueDate !== undefined && { dueDate: parseDueDate(dto.dueDate) }),
       },
     });
   }

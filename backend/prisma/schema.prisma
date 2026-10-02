@@ -49,6 +49,7 @@ model Column {
   id        String   @id @default(uuid())
   name      String
   order     Int      // define a posição da coluna no board (0, 1, 2...)
+  color     String   @default("#e2e8f0")
 
   boardId   String
   board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
@@ -62,6 +63,7 @@ model Task {
   description String?
   order       Int      // posição da tarefa dentro da coluna
   createdAt   DateTime @default(now())
+  dueDate     DateTime?
 
   columnId    String
   column      Column   @relation(fields: [columnId], references: [id], onDelete: Cascade)
