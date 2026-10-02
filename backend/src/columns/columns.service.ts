@@ -28,6 +28,7 @@ export class ColumnsService {
       data: {
         name: dto.name,
         order: dto.order,
+        color: dto.color,
         boardId,
       },
     });
@@ -41,8 +42,8 @@ export class ColumnsService {
   ) {
     await this.assertBoardAccess(userId, boardId);
 
-    if (dto.name === undefined && dto.order === undefined) {
-      throw new BadRequestException('Informe name e/ou order para atualizar');
+    if (dto.name === undefined && dto.order === undefined && dto.color === undefined) {
+      throw new BadRequestException('Informe name, order e/ou color para atualizar');
     }
 
     const column = await this.prisma.column.findFirst({
@@ -59,6 +60,7 @@ export class ColumnsService {
       data: {
         ...(dto.name !== undefined && { name: dto.name }),
         ...(dto.order !== undefined && { order: dto.order }),
+        ...(dto.color !== undefined && { color: dto.color }),
       },
     });
   }
