@@ -1,7 +1,7 @@
 import { clearToken, getToken } from "@/lib/auth";
 import type { ApiErrorBody } from "@/types/api";
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333").replace(/\/$/, "");
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333","https://taskflow-backend-h7qm.onrender.com").replace(/\/$/, "");
 
 export class ApiError extends Error {
   constructor(message: string, public readonly status: number) { super(message); this.name = "ApiError"; }
