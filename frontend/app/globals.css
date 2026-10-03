@@ -1,14 +1,24 @@
 @import "tailwindcss";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 * { box-sizing: border-box; }
 body { font-family: Arial, Helvetica, sans-serif; }
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="light"] { color-scheme: light; }
 .field-label { display: grid; gap: 0.45rem; font-size: 0.875rem; font-weight: 600; color: #334155; }
+html[data-theme="dark"] .field-label { color: #e2e8f0; }
 .field-input { width: 100%; border: 1px solid #cbd5e1; border-radius: 0.625rem; padding: 0.7rem 0.8rem; background: white; color: #0f172a; outline: none; }
+html[data-theme="dark"] .field-input { border-color: #475569; background: #1e293b; color: #f1f5f9; }
 .field-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgb(99 102 241 / 15%); }
 .primary-button { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; border: 0; border-radius: 0.625rem; background: #4f46e5; padding: 0.65rem 1rem; color: white; font-size: 0.875rem; font-weight: 600; transition: background 120ms ease; }
 .primary-button:hover { background: #4338ca; }
 .primary-button:disabled { cursor: wait; opacity: 0.6; }
 .secondary-button { display: inline-flex; align-items: center; justify-content: center; border: 1px solid #cbd5e1; border-radius: 0.625rem; background: white; padding: 0.65rem 1rem; color: #334155; font-size: 0.875rem; font-weight: 600; }
 .secondary-button:hover { background: #f8fafc; }
+html[data-theme="dark"] .secondary-button { border-color: #475569; background: #1e293b; color: #e2e8f0; }
+html[data-theme="dark"] .secondary-button:hover { background: #334155; }
 .icon-button { display: grid; width: 2rem; height: 2rem; place-items: center; border-radius: 0.5rem; padding: 0 0.45rem; color: #64748b; }
 .icon-button:hover { background: white; }
+html[data-theme="dark"] .icon-button { color: #cbd5e1; }
+html[data-theme="dark"] .icon-button:hover { background: #334155; }
+html[data-theme="dark"] section[style*="background-color"] { color: #1e293b; }
