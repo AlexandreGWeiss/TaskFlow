@@ -360,7 +360,7 @@ Essas informações não devem ser adicionadas ao repositório Git.
 
 Vídeo de apresentação do MVP:
 
-**Link:** Em breve
+**Link:** https://youtu.be/pvTciefc0NQ
 
 ## Projeto acadêmico
 
